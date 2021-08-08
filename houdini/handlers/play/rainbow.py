@@ -27,7 +27,7 @@ async def handle_rainbow_puffle_task_complete(p, task_id: int):
             if int(task_id) == len(RainbowQuestRewards) - 1:
                 await p.update(rainbow_adoptability=True).apply()
 
-            progression_expiry = (current_datetime + timedelta(days=30)).timestamp()
+            progression_expiry = (current_datetime + timedelta(days=30))
             await p.server.redis.incr(f'houdini.rainbow_task.{p.id}')
             await p.server.redis.set(f'houdini.rainbow_completion.{p.id}', int(time.time()))
             await p.server.redis.expireat(f'houdini.rainbow_task.{p.id}', progression_expiry)
@@ -47,7 +47,7 @@ async def handle_rainbow_quest_cookie(p):
 
     current_datetime = datetime.now()
     task_completion = await p.server.redis.get(f'houdini.rainbow_completion.{p.id}')
-    coins_collected = await p.server.redis.smembers(f'houdini.rainbow_coins.{p.id}', encoding='utf-8')
+    coins_collected = await p.server.redis.smembers(f'houdini.rainbow_coins.{p.id}')
 
     if task_completion:
         quest_wait = RainbowQuestWaitMember if p.is_member else RainbowQuestWait
@@ -88,7 +88,7 @@ async def handle_rainbow_puffle_task_coin_collected(p, task_id: int):
     if task_id <= int(current_task) and not coins_collected:
         await p.server.redis.sadd(f'houdini.rainbow_coins.{p.id}', task_id)
         await p.server.redis.expireat(f'houdini.rainbow_coins.{p.id}',
-                                      (datetime.now() + timedelta(days=30)).timestamp())
+                                      (datetime.now() + timedelta(days=30)))
         await p.update(coins=p.coins + 150).apply()
         await p.send_xt('rpqcc', task_id, 2, p.coins)
 
