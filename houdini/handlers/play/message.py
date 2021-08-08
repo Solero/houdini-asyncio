@@ -7,7 +7,7 @@ from houdini.handlers.play.moderation import moderator_ban, moderator_kick
 
 @handlers.boot
 async def filter_load(server):
-    server.chat_filter_words = await ChatFilterRuleCollection.get_collection()
+    server.chat_filter_words = {w.lower(): c for w, c in await ChatFilterRuleCollection.get_collection().items()}
     server.logger.info(f'Loaded {len(server.chat_filter_words)} filter words')
 
 
