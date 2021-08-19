@@ -146,5 +146,6 @@ async def moderator_ban(p, penguin_id, hours=24, comment='', message=''):
         if penguin_id in p.server.penguins_by_id:
             if player.is_vanilla_client:
                 await player.send_xt('ban', 612, 2, hours, comment)
+                await player.close()
             else:
                 await player.send_error_and_disconnect(610, comment)
